@@ -1,188 +1,158 @@
 :root {
-    --very-dark-blue: #111517;
-    --dark-gray: #858585;
-    --very-light-gray: #fafafa;
-    --white-color: #ffffff;
-  }
-  
+  --very-dark-blue: #111517;
+  --dark-gray: #858585;
+  --very-light-gray: #fafafa;
+  --white-color: #ffffff;
+}
+
+body {
+  --bg-color: var(--white-color);
+  --font-color: var(--very-dark-blue);
+  --header-color: var(--white-color);
+  --div-color: var(--white-color);
+  background: var(--bg-color);
+  color: var(--font-color);
+  font-size: 14px;
+  width: 100%;
+  height: 100vh;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Nunito Sans";
+  text-decoration: none;
+  color: var(--font-color);
+}
+.inner-container {
+  padding-bottom: 35px;
+}
+.mode p {
+  font-weight: 800;
+  font-size: 14px;
+}
+.mode i {
+  margin-right: 5px;
+}
+
+.back-btn {
+  margin-top: 77px;
+  margin-bottom: 77px;
+}
+.back-btn .btn {
+  border: none;
+  outline: none;
+  padding: 10px 37px;
+  background: var(--div-color);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.back-btn .btn i {
+  margin-right: 5px;
+}
+.wrapper .preview-img {
+  padding-right: 70px;
+  max-height: 405px;
+}
+.wrapper .preview-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.wrapper .preview-details {
+  padding: 45px 10px 30px 40px;
+}
+.preview-details .country-name {
+  margin-bottom: 20px;
+}
+.preview-details .country-name h1 {
+  font-size: 35px;
+  font-weight: 800;
+}
+.preview-details .country-details {
+  margin-bottom: 55px;
+}
+
+.preview-details .country-details .item-info {
+  font-size: 15px;
+  padding: 5px 0;
+}
+.preview-details .country-details .item-info span > strong {
+  font-weight: 700;
+}
+.preview-details .country-borders {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.preview-details .country-borders span {
+  font-weight: 700;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.preview-details .country-borders .borders a {
+  list-style: none;
+  display: inline-block;
+  border-radius: 3px;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  background: var(--div-color);
+  padding: 5px 17px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+  margin-bottom: 10px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+@media screen and (max-width: 375px) {
   body {
-    --bg-color: var(--white-color);
-    --font-color: var(--very-dark-blue);
-    --header-color: var(--white-color);
-    --div-color: var(--white-color);
-    background: var(--bg-color);
-    color: var(--font-color);
-    font-size: 14px;
-    width: 100%;
-    height: 100vh;
+    background: var(--very-light-gray);
   }
-  
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: "Nunito Sans";
-    text-decoration: none;
-    color: var(--font-color);
-  }
-  .mode p {
-    font-weight: 800;
-    font-size: 14px;
-  }
-  .mode i {
-    margin-right: 5px;
-  }
-  
-  .back-btn {
-    margin-top: 25px;
-    margin-bottom: 55px;
-  }
-  .back-btn .btn {
-    border: none;
-    outline: none;
-    padding: 10px 20px;
-    background: var(--div-color);
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: 600;
-    letter-spacing: 1px;
-  }
-  .back-btn .btn i {
-    margin-right: 5px;
-  }
-  .wrapper {
-    display: flex;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-  }
-  .wrapper .preview-img {
-    flex: 0 0 40%;
-    max-width: 40%;
-    
-   
-  }
-  .wrapper .preview-img img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.4);
-  }
-  
-  .wrapper .preview-details {
-    flex: 0 0 60%;
-    max-width: 60%;
-    padding: 10px 10px 30px 60px;
-  }
-  .preview-details .country-name {
-    display: flex;
+
+  .preview-details .country-borders {
     margin-bottom: 20px;
   }
-  .preview-details .country-name h1 {
-    font-size: 40px;
-    letter-spacing: 1px;
+  .preview-details .country-borders .borders a {
+    margin-right: 5px;
   }
-  .preview-details .country-details {
-    display: flex;
-    flex-wrap: wrap;
+}
+@media screen and (max-width: 768px) {
+  .inner-container {
+    margin-top: 25px;
+    padding: 0 35px 0 15px;
+  }
+  .back-btn {
+    margin-top: 50px;
+    margin-bottom: 55px;
+  }
+  .country-details {
+    padding-bottom: 0;
+  }
+  .country-details .row .left,
+  .right {
     margin-bottom: 40px;
   }
-  .preview-details .country-details .country-details-left,
-  .country-details-right {
-    flex: 0 0 50%;
-    max-width: 50%;
+  .preview-details .country-name {
+    padding: 20px 10px;
   }
-  .preview-details .country-details .item-info {
-    flex: 0 0 100%;
-    max-width: 100%;
+  .preview-details .country-details {
+    margin-bottom: 0;
   }
-  .preview-details .country-details .item-info p {
-    font-size: 15px;
-    letter-spacing: 1px;
-    padding: 5px 0;
+}
+@media screen and (max-width: 912px) {
+  .wrapper .preview-img {
+    padding-right: 0;
   }
-  .preview-details .country-details .item-info p > strong {
-    font-weight: 600;
+  .wrapper .preview-details {
+    padding: 30px 10px 30px 10px;
   }
-  .preview-details .country-borders {
-    display: flex;
-    flex-wrap: wrap;
-  }
+}
+@media screen and (max-width: 1097px) {
   .preview-details .country-borders p {
-    font-weight: 600;
-    margin-right: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
   }
-  .preview-details .country-borders ul li {
-    list-style: none;
-    display: inline-block;
-    border-radius: 3px;
-    margin-right: 10px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-    background: var(--div-color);
-    padding: 5px 15px;
-    font-size: 14px;
-    font-weight: 500;
-    width: 90px;
-    text-align: center;
-    margin-bottom: 10px;
-	cursor: pointer;
-  }
-  
-  @media screen and (max-width: 375px) {
-    body {
-      background: var(--very-light-gray);
-    }
-  
-    .preview-details .country-borders {
-      margin-bottom: 20px;
-    }
-    .preview-details .country-borders ul li {
-      margin-right: 5px;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    main {
-      margin-top: 25px;
-      padding: 0 30px;
-    }
-    .back-btn {
-      margin-top: 50px;
-      margin-bottom: 55px;
-    }
-
-    .preview-details .country-name {
-      margin: 20px 0;
-    }
-    .preview-details .country-details .country-details-left,
-    .country-details-right {
-      flex: 0 0 100%;
-      max-width: 100%;
-      margin-bottom: 40px;
-    }
-  }
-  @media screen and (max-width: 910px){
-    .wrapper{
-      flex-wrap: wrap;
-    }
-    .wrapper .preview-img{
-      flex: 0 0 100%;
-      max-width: 100%;
-      
-    }
-  .wrapper .preview-details{
-    flex: 0 0 100%;
-    max-width: 100%;
-    padding: 30px 0 30px 0;
-  }
-  }
-  @media screen and (max-width: 1097px){
-    .preview-details .country-borders p {
-      margin-bottom: 20px;
-    }
-  }
-
-
-
-  
+}

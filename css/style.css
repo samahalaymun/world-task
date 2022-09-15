@@ -12,6 +12,7 @@ body {
   --header-color: var(--white-color);
   --div-color: var(--white-color);
   background: var(--bg-color);
+  --hover-over: var(--very-light-gray);
   color: var(--font-color);
   font-size: 14px;
   width: 100%;
@@ -23,198 +24,167 @@ body {
   box-sizing: border-box;
   font-family: "Nunito Sans";
 }
-a{
+a {
   text-decoration: none;
   color: var(--font-color);
-
 }
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+a:hover {
+  color: var(--font-color);
+}
+nav {
   background-color: var(--header-color);
-  height: 50px;
-  padding: 30px 50px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.075);
 }
-.title h1 {
-  font-size: 20px;
+nav .title {
+  font-size: 23px;
   font-weight: 800;
 }
-.mode{
+nav .mode {
   cursor: pointer;
+  font-size: 16px;
 }
-.mode p {
+nav .mode span {
   font-weight: 800;
 }
-.mode i {
+nav .mode span i {
   margin-right: 5px;
 }
-main {
-  padding: 35px 50px;
+
+.countries {
+  margin-top: 50px;
+}
+.countries .row {
+  margin-left: -40px;
+  margin-right: -40px;
 }
 .search-header {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
+  margin-top: 50px;
 }
-.search-header .search-box {
-  width: 450px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 50px;
+.country {
+  margin-bottom: 25px;
+  padding: 0 18px;
+}
+
+.search-box {
+  max-width: 470px;
+  width: 100%;
   background: var(--div-color);
   border-radius: 5px;
-  padding: 0 25px;
+  padding: 10px 25px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
-.search-btn {
-  background: none;
-  border: none;
-  outline: none;
-  margin-right: 15px;
-}
-.search-btn .fa {
+
+.search-box .fa {
   color: var(--dark-gray);
 }
-.search {
+.form-control {
   width: 100%;
   border: none;
   outline: none;
   background-color: transparent;
 }
-
-.filter {
+.form-control:focus {
+  box-shadow: none;
+}
+.dropdown {
   width: 200px;
-  height: 50px;
   background: var(--div-color);
   border-radius: 5px;
-  padding: 17px 25px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-  position: relative;
- 
 }
-.filter .filter-btn {
+.dropdown button {
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-weight: 600;
-}
-.filter .filter-btn{
   border: none;
   outline: none;
   background: transparent;
   cursor: pointer;
-}
-
-.dropdown {
-  width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  padding: 17px 17px;
+}
+.dropdown .dropdown-menu {
+  width: 100%;
   background: var(--div-color);
-  margin-top: 3px;
+  margin-top: 5px;
   border-radius: 5px;
-  padding: 10px 15px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
 }
-
-.dropdown ul li {
-  list-style: none;
-  font-weight: 600;
-  margin-bottom: 5px;
-}
-.filter .dropdown  {
-  display: block;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.4s;
-  position: absolute;
-  left: 0;
-  top: 100%;
-}
-.filter-btn:focus + .dropdown {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: auto;
-  z-index: 1;
+.dropdown .dropdown-menu ul li {
+  margin-top: 5px;
 }
 
-.countries {
-  margin-top: 35px;
-}
-.row {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
-  grid-gap: 50px;
-
-
-}
-
-.country-info {
-  min-height: 400px;
+.card {
   background: var(--div-color);
-  border-radius: 5px;
+  border-radius: 7px;
   box-shadow: 1px 1px 4px 1px rgba(48, 46, 77, 0.15);
   overflow: hidden;
   position: relative;
+  border: none;
 }
-.country-info:hover{
-  box-shadow: 1px 1px 4px 4px rgba(48, 46, 77, 0.24);
-  transition: 0.3s;
-  transform: scale(1.03);
+.card .img {
+  height: 160px;
 }
-.country-info .item-img {
-  height: 200px;
-}
-.item-img img {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+.card img {
+  border-top-left-radius: 7px;
+  border-top-right-radius: 7px;
   object-fit: cover;
   width: 100%;
   height: 100%;
 }
-.country-info .country-details {
-  width: 100%;
-  padding: 35px 15px 35px;
-}
-.country-info .country-details .item-name {
-  padding: 0 0 15px;
-}
 
-.country-info .country-details .item-info p {
+.card:hover {
+  box-shadow: 1px 1px 4px 4px rgba(48, 46, 77, 0.24);
+  transition: 0.3s;
+  transform: scale(1.03);
+}
+.card-body .card-title {
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 800;
+  color: var(--font-color);
+  margin-bottom: 15px;
+}
+.card .card-body {
+  width: 100%;
+  padding: 25px 20px 35px;
+}
+.card-body .card-text {
   margin-bottom: 5px;
+}
+.card-body .card-text span {
   font-weight: 600;
 }
-.country-info .country-details .item-info p span {
-  font-weight: 500;
-}
-@media (max-width: 768px) {
-  header {
-    padding: 30px 20px;
-  }
-  main {
+
+@media (max-width: 767px) {
+  .search-header {
     margin-top: 25px;
-    padding: 0 20px;
   }
-}
-@media (max-width: 706px) {
   .filter {
     margin-top: 35px;
+  }
+  .countries .row {
+    margin-left: 0;
+    margin-right: 0;
   }
 }
 
 @media (max-width: 375px) {
-  header {
-    padding: 30px 10px;
-  }
-  main {
-    margin-top: 25px;
-    padding: 0 10px;
+  .country {
+    padding: 0 15px;
   }
   .country-info {
     margin-left: 25px;
     margin-right: 25px;
+  }
+  nav .title {
+    font-size: 18px;
+    font-weight: 800;
+  }
+  nav .mode {
+    cursor: pointer;
+    font-size: 14px;
   }
 }
