@@ -4,6 +4,8 @@
   --dark-gray: #858585;
   --very-light-gray: #fafafa;
   --white-color: #ffffff;
+  --very-dark-blue-mode: #202c37;
+  --dark-blue: #2b3945;
 }
 
 body {
@@ -11,6 +13,7 @@ body {
   --font-color: var(--very-dark-blue);
   --header-color: var(--white-color);
   --div-color: var(--white-color);
+  --icon-color: var(--dark-gray);
   background: var(--bg-color);
   --hover-over: var(--very-light-gray);
   color: var(--font-color);
@@ -18,11 +21,68 @@ body {
   width: 100%;
   height: 100vh;
 }
+.spinner-container{
+  display: none;
+  margin-top: 200px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+.spinner-container.display {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  z-index: 1;
+}
+.sppiner {
+  width: 100px;
+  height: 100px;
+  border: 1px dotted transparent;
+  border-top: 6px solid var(--font-color);
+  border-radius: 50%;
+  animation: spin 1.3s infinite linear;
+  display: block;
+  position: fixed;
+  /* left: 50%;
+  top: 50%; */
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+body.dark {
+  --bg-color: var(--very-dark-blue-mode);
+  --font-color: var(--very-light-gray);
+  --header-color: var(--dark-blue);
+  --div-color: var(--dark-blue);
+  --icon-color: var(--very-light-gray);
+}
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   font-family: "Nunito Sans";
+}
+.error {
+  display: none;
+  max-width: 470px;
+  width: 100%;
+  color: #d8000c;
+  background-color: #ffbaba;
+  border: 1px solid;
+  margin: 10px 0px;
+  padding: 15px 10px 15px 50px;
+  background-repeat: no-repeat;
+  background-position: 10px center;
+  border-radius: 5px;
 }
 a {
   text-decoration: none;
@@ -37,15 +97,24 @@ nav {
 nav .title {
   font-size: 23px;
   font-weight: 800;
+  color: var(--font-color);
+}
+nav .title:hover {
+  color: var(--font-color);
 }
 nav .mode {
-  cursor: pointer;
   font-size: 16px;
 }
-nav .mode span {
-  font-weight: 800;
+nav .mode button {
+  background: none;
+  border: 0;
+  outline: none;
+  color: var(--font-color);
 }
-nav .mode span i {
+nav .mode button {
+  font-weight: 500;
+}
+nav .mode button i {
   margin-right: 5px;
 }
 
@@ -64,26 +133,33 @@ nav .mode span i {
   padding: 0 18px;
 }
 
-.search-box {
+.search-box .fa {
+  position: absolute;
+  padding-left: 35px;
+  color: var(--icon-color);
+}
+.form-control {
   max-width: 470px;
   width: 100%;
   background: var(--div-color);
   border-radius: 5px;
-  padding: 10px 25px;
+  padding: 15px 25px 15px 75px;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-}
-
-.search-box .fa {
-  color: var(--dark-gray);
-}
-.form-control {
-  width: 100%;
   border: none;
-  outline: none;
-  background-color: transparent;
+  color: var(--font-color);
 }
 .form-control:focus {
-  box-shadow: none;
+  background: var(--div-color);
+  color: var(--font-color);
+}
+.form-control::placeholder {
+  color: var(--font-color);
+}
+.form-control::-webkit-search-decoration,
+.form-control::-webkit-search-cancel-button,
+.form-control::-webkit-search-results-button,
+.form-control::-webkit-search-results-decoration{
+  -webkit-appearance:none;
 }
 .dropdown {
   width: 200px;
@@ -102,6 +178,7 @@ nav .mode span i {
   align-items: center;
   font-weight: 600;
   padding: 17px 17px;
+  color: var(--font-color);
 }
 .dropdown .dropdown-menu {
   width: 100%;
@@ -113,7 +190,9 @@ nav .mode span i {
 .dropdown .dropdown-menu ul li {
   margin-top: 5px;
 }
-
+.dropdown-item {
+  color: var(--font-color);
+}
 .card {
   background: var(--div-color);
   border-radius: 7px;
@@ -169,6 +248,7 @@ nav .mode span i {
     margin-left: 0;
     margin-right: 0;
   }
+
 }
 
 @media (max-width: 375px) {

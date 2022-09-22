@@ -16,6 +16,14 @@ body {
   width: 100%;
   height: 100vh;
 }
+body.dark {
+  --bg-color: var(--very-dark-blue-mode);
+  --font-color: var(--very-light-gray);
+  --header-color: var(--dark-blue);
+  --div-color: var(--dark-blue);
+  --icon-color:var(--very-light-gray);
+}
+
 * {
   padding: 0;
   margin: 0;
@@ -26,13 +34,6 @@ body {
 }
 .inner-container {
   padding-bottom: 35px;
-}
-.mode p {
-  font-weight: 800;
-  font-size: 14px;
-}
-.mode i {
-  margin-right: 5px;
 }
 
 .back-btn {
@@ -46,7 +47,7 @@ body {
   background: var(--div-color);
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
   border-radius: 5px;
-  cursor: pointer;
+  color: var(--font-color);
 }
 .back-btn .btn i {
   margin-right: 5px;
