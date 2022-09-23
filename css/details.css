@@ -10,6 +10,9 @@ body {
   --font-color: var(--very-dark-blue);
   --header-color: var(--white-color);
   --div-color: var(--white-color);
+  --hover-bg:var(--dark-gray);
+  --hover-color:var(--very-light-gray);
+  --box-shadow:0 0 4px rgba(0, 0, 0, 0.2);
   background: var(--bg-color);
   color: var(--font-color);
   font-size: 14px;
@@ -22,6 +25,10 @@ body.dark {
   --header-color: var(--dark-blue);
   --div-color: var(--dark-blue);
   --icon-color:var(--very-light-gray);
+  --hover-bg:var(--very-light-gray);
+  --hover-color:var(--very-dark-blue);
+  --box-shadow:1px 1px 5px 1px rgba(17, 21, 23, 0.7);
+
 }
 
 * {
@@ -45,7 +52,7 @@ body.dark {
   outline: none;
   padding: 10px 37px;
   background: var(--div-color);
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
   border-radius: 5px;
   color: var(--font-color);
 }
@@ -98,7 +105,7 @@ body.dark {
   list-style: none;
   display: inline-block;
   border-radius: 3px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
   background: var(--div-color);
   padding: 5px 17px;
   font-size: 14px;
@@ -108,7 +115,10 @@ body.dark {
   cursor: pointer;
   margin-right: 10px;
 }
-
+.preview-details .country-borders .borders a:hover{
+  background-color: var(--hover-bg);
+  color: var(--hover-color);
+}
 @media screen and (max-width: 375px) {
   body {
     background: var(--very-light-gray);

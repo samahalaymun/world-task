@@ -3,16 +3,21 @@ let countryname = params.get("country");
 
 async function getCountryDetails() {
   let url = `https://restcountries.com/v3.1/name/${countryname}?fullText=true`;
+try {
   const response = await fetch(url);
   countryObject = await response.json();
   if (response.status === 200) {
     showCountryDetails(countryObject);
   } else {
+    throw "somthing went wrong";
   }
+} catch (error) {
+ alert(error)
+}
 }
 function showCountryDetails(countryObject) {
   const countrywrapper = document.querySelector(".wrapper");
-  spinner.classList.remove("display");
+  removeSpinner();
   countryObject.forEach((country) => {
     const countryDetailesContainer = document.createElement("div");
     countryDetailesContainer.classList.add("row");
@@ -29,13 +34,10 @@ function showCountryDetails(countryObject) {
     languageObjects.forEach((language) => {
       languageString += language + ", ";
     });
-    currenciesString = currenciesString.substring(
-      0,
-      currenciesString.length - 2
-    );
+    currenciesString = currenciesString.substring(0,currenciesString.length - 2);
     languageString = languageString.substring(0, languageString.length - 2);
     document.title = country.name.common;
-
+    changetabIcon(country.flags.svg)
     countryDetailesContainer.innerHTML = `
   <div class="preview-img col-12 col-md-12 col-lg-6">
                 <img src="${country.flags.svg}" alt="" />
@@ -122,6 +124,7 @@ function showCountryDetails(countryObject) {
   });
 }
 async function getBorderName(border) {
+try {
   const response = await fetch(
     `https://restcountries.com/v3.1/alpha/${border}`
   );
@@ -129,5 +132,9 @@ async function getBorderName(border) {
     const borderCountry = await response.json();
     return borderCountry[0].name.common;
   }
+} catch (error) {
+  
 }
+}
+
 getCountryDetails();

@@ -3,22 +3,26 @@ let countries = [];
 let countriesDisplayed;
 async function getCountries() {
   const url = "https://restcountries.com/v3.1/all";
+  try {
   const response = await fetch(url);
   if (response.status === 200) {
     countries = await response.json();
     countriesContainer.innerHTML = "";
+    removeError();
     countries.forEach((country) => {
       showCountry(country);
     });
     countriesDisplayed =countriesContainer.querySelectorAll(".country-container");
   }else{
-    alert("somthing went wrong");
+    throw "somthing went wrong";
   }
-
+} catch (error) {
+   displayError(error)
+}
 }
 
 function showCountry(country) {
-  spinner.classList.remove("display");
+  removeSpinner();
   const countryFalg = country.flags.svg;
   const countryName = country.name.common;
   const countryPopulation = country.population.toLocaleString("en-US");
@@ -34,7 +38,7 @@ function showCountry(country) {
     "country-container"
   );
   countryContainer.innerHTML = `
- <a href="details.html?country=${country.name.common}">
+ <a href="details.html?country=${country.name.common }">
    <div class="country">
      <div class="card">
        <div class="img">
@@ -76,42 +80,31 @@ filterDropDownList.forEach((list) => {
 const deboune=(fun,delay)=>{
   let timeoutid;
   return function(...args){
-    if(timeoutid){
-        clearTimeout(timeoutid)
-    }
    timeoutid= setTimeout(()=>{
       fun(...args);
     },delay)
   }
 }
 const searchInput = document.querySelector(".form-control");
-const fetchController=new AbortController();
-
 searchInput.addEventListener("keyup",deboune(
   e => {
-    if (e.target.value) {
-      console.log(e.target.value)
+    if (e.target.value.trim()) {
       const url = `https://restcountries.com/v3.1/name/${e.target.value.toLowerCase()}`;
       searchResult(url);
     } else {
-      console.log("input empty")
       removeError();
       getCountries();
     }
-  },1000));
-let count=0;
+  },500));
 async function searchResult(url) {
-  count++;
-  console.log(count)
-  let timeout=setTimeout(()=>{
-     fetchController.abort()
-     console.log("abort")
-  },1000)
   try {
-    const response = await fetch(url,fetchController.abort());
+    const fetchController=new AbortController();
+    let timeout=setTimeout(()=>{
+      fetchController.abort()
+    },1000)
+    const response = await fetch(url,fetchController.signal);
     if (response.status === 200) {
       const result = await response.json();
-      clearTimeout(timeout)
       console.log(result)
       countriesContainer.innerHTML = "";
       removeError();
@@ -123,14 +116,8 @@ async function searchResult(url) {
       throw "Country not fount";
     }
   } catch (error) {
-    if (error.name === "AbortError") {
-      removeError();
-      return;
-    }else{
-      console.log(error)
-      displayError(error)
-    }
-
+      countriesContainer.innerHTML = "";
+      displayError(error);
   }
 }
 

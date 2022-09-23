@@ -16,6 +16,8 @@ body {
   --icon-color: var(--dark-gray);
   background: var(--bg-color);
   --hover-over: var(--very-light-gray);
+  --box-shadow:0 0 4px rgba(0, 0, 0, 0.2);
+  --box-shadow-hover:1px 1px 4px 4px rgba(48, 46, 77, 0.24);
   color: var(--font-color);
   font-size: 14px;
   width: 100%;
@@ -64,6 +66,9 @@ body.dark {
   --header-color: var(--dark-blue);
   --div-color: var(--dark-blue);
   --icon-color: var(--very-light-gray);
+  --hover-color:var(--very-dark-blue);
+  --box-shadow:1px 1px 5px 1px rgba(17, 21, 23, 0.7);
+  --box-shadow-hover:1px 1px 4px 4px rgba(17, 21, 23, 0.24);
 }
 * {
   padding: 0;
@@ -144,7 +149,7 @@ nav .mode button i {
   background: var(--div-color);
   border-radius: 5px;
   padding: 15px 25px 15px 75px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
   border: none;
   color: var(--font-color);
 }
@@ -165,7 +170,7 @@ nav .mode button i {
   width: 200px;
   background: var(--div-color);
   border-radius: 5px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
 }
 .dropdown button {
   width: 100%;
@@ -185,7 +190,7 @@ nav .mode button i {
   background: var(--div-color);
   margin-top: 5px;
   border-radius: 5px;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
 }
 .dropdown .dropdown-menu ul li {
   margin-top: 5px;
@@ -200,6 +205,7 @@ nav .mode button i {
   overflow: hidden;
   position: relative;
   border: none;
+  box-shadow: var(--box-shadow);
 }
 .card .img {
   height: 160px;
@@ -213,7 +219,7 @@ nav .mode button i {
 }
 
 .card:hover {
-  box-shadow: 1px 1px 4px 4px rgba(48, 46, 77, 0.24);
+  box-shadow: var(--box-shadow-hover);
   transition: 0.3s;
   transform: scale(1.03);
 }
@@ -232,6 +238,9 @@ nav .mode button i {
 }
 .card-body .card-text {
   margin-bottom: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .card-body .card-text span {
   font-weight: 600;
