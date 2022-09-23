@@ -120,9 +120,6 @@ body.dark {
   color: var(--hover-color);
 }
 @media screen and (max-width: 375px) {
-  body {
-    background: var(--very-light-gray);
-  }
 
   .preview-details .country-borders {
     margin-bottom: 20px;
