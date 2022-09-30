@@ -1,43 +1,23 @@
 const params = new URLSearchParams(window.location.search);
 let countryname = params.get("country");
+let init=async()=>{
+  loadSpinner();
+  let country=await getCountryDetails(countryname);
+  removeSpinner();
+  showCountryDetails(country)
+}
 
-async function getCountryDetails() {
-  let url = `https://restcountries.com/v3.1/name/${countryname}?fullText=true`;
-try {
-  const response = await fetch(url);
-  countryObject = await response.json();
-  if (response.status === 200) {
-    showCountryDetails(countryObject);
-  } else {
-    throw "somthing went wrong";
-  }
-} catch (error) {
- alert(error)
-}
-}
 function showCountryDetails(countryObject) {
   const countrywrapper = document.querySelector(".wrapper");
-  removeSpinner();
   countryObject.forEach((country) => {
+    const {currencies,languages,borders,name}=country;
     const countryDetailesContainer = document.createElement("div");
     countryDetailesContainer.classList.add("row");
-    let currencies = country.currencies;
-    let languages = country.languages;
-    let borders = country.borders;
-    let currenciesString = "";
-    let languageString = "";
-    let languageObjects = Object.values(languages);
-    let currenciesObjects = Object.values(currencies);
-    currenciesObjects.forEach((currency) => {
-      currenciesString += currency.name + ", ";
-    });
-    languageObjects.forEach((language) => {
-      languageString += language + ", ";
-    });
-    currenciesString = currenciesString.substring(0,currenciesString.length - 2);
-    languageString = languageString.substring(0, languageString.length - 2);
-    document.title = country.name.common;
-    changetabIcon(country.flags.svg)
+    let nativeName = Object.values(name.nativeName)[0].official;
+    let currenciesString = (Object.values(currencies).map(item=>item.name)).toString();
+    let languageString = (Object.values(languages)).toString();
+    document.title = name.common;
+    changeTabIcon(country.flags.svg)
     countryDetailesContainer.innerHTML = `
   <div class="preview-img col-12 col-md-12 col-lg-6">
                 <img src="${country.flags.svg}" alt="" />
@@ -45,7 +25,7 @@ function showCountryDetails(countryObject) {
               <div class="preview-details col-12 col-md-12 col-lg-6">
                 <div class="row">
                   <div class="country-name">
-                    <h1>${country.name.common}</h1>
+                    <h1>${name.common}</h1>
                   </div>
                 </div>
                 <div class="row">
@@ -54,7 +34,7 @@ function showCountryDetails(countryObject) {
                       <div class="col-12 col-md-6 col-lg-6 left">
                         <div class="item-info">
                           <span><strong>Native Name:</strong> ${
-                            country.name.official
+                            nativeName
                           }</span>
                         </div>
                         <div class="item-info">
@@ -108,19 +88,7 @@ function showCountryDetails(countryObject) {
               </div>
   `;
     countrywrapper.appendChild(countryDetailesContainer);
-    let borderscontainers = document.getElementById("borders");
-    borderscontainers.innerHTML = "";
-    if (borders) {
-      borders.forEach(async (border) => {
-        let country = await getBorderName(border);
-        let a = document.createElement("a");
-        a.href = `details.html?country=${country}`;
-        a.appendChild(document.createTextNode(`${country}`));
-        borderscontainers.appendChild(a);
-      });
-    } else {
-      borderscontainers.innerHTML = ` ${countryname} has no bodrers`;
-    }
+    displayBorders(borders);
   });
 }
 async function getBorderName(border) {
@@ -136,5 +104,19 @@ try {
   
 }
 }
-
-getCountryDetails();
+function displayBorders(borders){
+  let borderscontainers = document.getElementById("borders");
+  borderscontainers.innerHTML = "";
+  if (borders) {
+    borders.forEach(async (border) => {
+      let country = await getBorderName(border);
+      let a = document.createElement("a");
+      a.href = `details.html?country=${border}`;
+      a.appendChild(document.createTextNode(`${country}`));
+      borderscontainers.appendChild(a);
+    });
+  } else {
+    borderscontainers.innerHTML = ` ${countryname} has no bodrers`;
+  }
+}
+init();
