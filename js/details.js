@@ -116,7 +116,7 @@ function displayBorders(borders){
       borderscontainers.appendChild(a);
     });
   } else {
-    borderscontainers.innerHTML = ` ${countryname} has no bodrers`;
+    borderscontainers.innerHTML = `this country has no bodrers`;
   }
 }
 init();
