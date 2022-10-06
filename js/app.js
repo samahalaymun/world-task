@@ -5,59 +5,61 @@ const searchInput = document.querySelector(".form-control");
 const favouritesContainer = document.querySelector(".favourites-list");
 const dropedContainer = document.querySelector(".section-container");
 let draggableCountry = null;
-let draggableCountries=[];
-let favourites = getFavourites() ? getFavourites() : [];
+let draggableCountries = [];
+let countries;
+let favourites = getFavourites() || [];
 let init = async () => {
-  let countries;
   loadSpinner();
   countries = await getCountries();
   removeSpinner();
-  displayCountries(countries);
-  assignOnFilter(() => {
-    filterDropDownList.forEach((list) => {
-      let filteredCountries;
-      list.addEventListener("click", () => {
-        filteredCountries = applyRegionFilter(list, countries);
-        displayCountries(filteredCountries);
-      });
-    });
-  });
-
-  onSearchInput(() => {
-    let searchedCountries;
-    searchInput.addEventListener(
-      "keyup",
-      deboune(async (e) => {
-        searchedCountries = await searchCountries(e.target.value);
-        handleFilterButtonText(searchedCountries);
-        displayCountries(searchedCountries);
-      }, 500)
+  let html = prepareHtmlView(countries);
+  displayCountries(html,countriesContainer);
+  assignDraggableCountries()
+  onFilterClicked(filterDropDownList, (event) => {
+    let filteredCountries;
+    filteredCountries = applyRegionFilter(
+      searchInput.value,
+      event.target,
+      countries
     );
+    let filteredHtml = prepareHtmlView(filteredCountries);
+    displayCountries(filteredHtml,countriesContainer);
+    assignDraggableCountries()
   });
 
-  displayFavouriteCountries(favourites);
-  assignDeleteFavBtns(() => {
-    favouritesContainer.addEventListener("click",function(e){
-       if(e.target.nodeName =="BUTTON"){
-        let btn=e.target;
-        let id=btn.getAttribute("name");
+  onSearchInput(searchInput, async (event) => {
+    let searchedCountries;
+    searchedCountries = await searchCountries(event.target.value);
+    handleFilterButtonText(searchedCountries);
+    let searchedHtml = prepareHtmlView(searchedCountries);
+    displayCountries(searchedHtml,countriesContainer);
+    assignDraggableCountries()
+  });
+
+  
+  let favouritesHtml=prepareFavouritesHtml(favourites);
+  displayCountries(favouritesHtml,favouritesContainer);
+  assignDeleteFavBtns(favouritesContainer,(e) => {
+      if (e.target.nodeName == "BUTTON") {
+        let btn = e.target;
+        let id = btn.getAttribute("name");
         let deletedItem = document.getElementById(`${id}`);
         favouritesContainer.removeChild(deletedItem);
+        indicateFavIconColor(id,true);
         removeFavouriteCountry(id);
-       }
-    })
+      }
+    
   });
   dropedContainerEvent();
 };
 init();
 function dragStart() {
   draggableCountry = this;
-  draggableCountry.style.opacity=0.5
+  draggableCountry.style.opacity = 0.5;
 }
 function dragEnd() {
-  draggableCountry.style.opacity=1
+  draggableCountry.style.opacity = 1;
   draggableCountry = null;
- 
 }
 function dragOver(e) {
   e.preventDefault();
@@ -71,27 +73,43 @@ function dragLeave() {
 }
 async function dragDrop() {
   let cca3 = draggableCountry.querySelector("button").getAttribute("icon-name");
+  let favourite=isFavourite(cca3)
   let countryObject = {
     cca3: cca3,
     flag: draggableCountry.querySelector("img").src,
     name: draggableCountry.querySelector(".card-title").innerText,
   };
-  if (!isFavourite(cca3)) {
-    let country =await getCountryDetails(cca3);
-    showFavouriteCountry(countryObject);
-    setFavouriteCountry(country[0]);
+  if (!favourite) {
+    let country=countries.find(item=>{
+      return item.name.common === countryObject.name;
+     })
+    setFavouriteCountry(country);
+    let favouritesHtml=prepareFavouritesHtml(favourites);
+    displayCountries(favouritesHtml,favouritesContainer);
+    indicateFavIconColor(cca3,favourite);
   }
   this.style.border = "none";
 }
 
-function assignOnFilter(callback) {
-  callback();
+function onFilterClicked(filterDropDownList, callback) {
+  filterDropDownList.forEach((list) => {
+    list.addEventListener("click", (event) => {
+      callback(event);
+    });
+  });
 }
-function onSearchInput(callback) {
-  callback();
+function onSearchInput(searchInput, callback) {
+  searchInput.addEventListener(
+    "keyup",
+    deboune(async (e) => {
+      callback(e);
+    }, 500)
+  );
 }
-function assignDeleteFavBtns(callback) {
-  callback();
+function assignDeleteFavBtns(favouritesContainer,callback) {
+  favouritesContainer.addEventListener("click",(event)=>{
+    callback(event)
+  })
 }
 async function getCountries() {
   const url = "https://restcountries.com/v3.1/all";
@@ -106,74 +124,82 @@ async function getCountries() {
     displayError(error);
   }
 }
-function displayCountries(countries) {
+function displayCountries(html,container) {
+  container.innerHTML = html;
+}
+function assignDraggableCountries(){
+   draggableCountries =countriesContainer.querySelectorAll(".country-container");
+   addDragDropEvent(draggableCountries)
+}
+
+function prepareHtmlView(countries) {
+  let html = "";
   if (countries) {
     countriesContainer.innerHTML = "";
     removeError();
+    countries.forEach((country) => {
+      let favourite = isFavourite(country.cca3);
+      html += `
+      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-4 ">
+      <div class="country-container">
+      <a href="details.html?country=${country.cca3}"draggable ="true">
+      <div class="country" >
+        <div class="card">
+          <div class="img">
+            <img src="${country.flags.svg}" alt="${
+        country.name.common
+      }" class="card-img-top" />
+          </div>
+          <div class="card-body">
+            <h2 class="card-title">${country.name.common}</h2>
+            <p class="card-text">
+              <span>Population:</span> ${country.population.toLocaleString(
+                "en-US"
+              )}
+            </p>
+            <p class="card-text"><span>Region:</span> ${country.region}</p>
+            <p class="card-text"><span>Capital:</span> ${country?.capital}</p>
+          </div>
+          <button class="btn icon ${
+            favourite === true ? "fav" : " "
+          }" onclick=" handleFavouriteCountryEvent('${
+        country.cca3
+      }',event) "icon-name="${
+        country.cca3
+      }"><i class="fa-solid fa-star"></i></button>
+        </div>
+      </div>
+    </a> 
+      
+      </div>
+      </div>
+      `;
+    });
+  } else {
+    html = `there are no countries to display`;
   }
-  countries.forEach((country) => {
-    let favourite = isFavourite(country.cca3);
-    let countryObject = {
-      capital: country?.capital,
-      cca3: country.cca3,
-      flag: country.flags.svg,
-      name: country.name.common,
-      population: country.population,
-      region: country.region,
-      favourite: favourite,
-    };
-    showCountry(countryObject);
-  });
-  draggableCountries =countriesContainer.querySelectorAll(".country-container");
-  addDragDropEvent(draggableCountries)
+  return html;
 }
-
-function showCountry(countryObject) {
-  const { capital, cca3, flag, name, population, region, favourite } =
-    countryObject;
-  const countryContainer = document.createElement("div");
-  countryContainer.classList.add(
-    "col-12",
-    "col-sm-6",
-    "col-md-6",
-    "col-lg-6",
-    "col-xl-4",
-    "country-container"
-  );
-  countryContainer.innerHTML = `
- <a href="details.html?country=${cca3}"draggable ="true">
-   <div class="country" >
-     <div class="card">
-       <div class="img">
-         <img src="${flag}" alt="${name}" class="card-img-top" />
-       </div>
-       <div class="card-body">
-         <h2 class="card-title">${name}</h2>
-         <p class="card-text">
-           <span>Population:</span> ${population.toLocaleString("en-US")}
-         </p>
-         <p class="card-text"><span>Region:</span> ${region}</p>
-         <p class="card-text"><span>Capital:</span> ${capital}</p>
-       </div>
-       <button class="btn icon ${favourite===true ?'fav':' '}" onclick=" handleFavouriteCountryEvent('${cca3}',event) "icon-name="${cca3}"><i class="fa-solid fa-star"></i></button>
-     </div>
-   </div>
- </a>
- `;
-  countriesContainer.appendChild(countryContainer);
-}
-function applyRegionFilter(list, countries) {
+function applyRegionFilter(searchWord, list, countries) {
   let filteredCountires = [];
   const continent = list.innerText.toLowerCase();
   changeFilterButtonText(list.innerText);
-  countries.forEach((country) => {
-    if (continent === "all") filteredCountires = countries;
-    else if (country.region.toLowerCase() === continent) {
-      filteredCountires.push(country);
-    } else if (continent === "favourites") {
-      filteredCountires = favourites;
-    }
-  });
+  if (!searchWord) {
+    countries.forEach((country) => {
+      if (continent === "all") filteredCountires = countries;
+      else if (country.region.toLowerCase() === continent) {
+        filteredCountires.push(country);
+      } else if (continent === "favourites") {
+        filteredCountires = favourites;
+      }
+    });
+  } else {
+    filteredCountires = handleFilterAndsearchEvents(
+      searchWord,
+      continent,
+      countries
+    );
+  }
   return filteredCountires;
 }
 function changeFilterButtonText(text) {
@@ -185,6 +211,28 @@ function handleFilterButtonText(searchedCountries) {
   } else {
     changeFilterButtonText("all");
   }
+}
+function handleFilterAndsearchEvents(searchWord, continent, countries) {
+  let filteredCountires = [];
+  countries.forEach((country) => {
+    if (
+      country.name.official.toLowerCase().indexOf(searchWord) !== -1 &&
+      continent !== "all" &&
+      country.region.toLowerCase() === continent
+    ) {
+      filteredCountires.push(country);
+    }else if(country.name.official.toLowerCase().indexOf(searchWord) !== -1 &&
+      continent === "all"){
+        filteredCountires.push(country);
+    }else if( continent === "favourites"){
+     filteredCountires=favourites.filter(item=>{
+      return item.name.official.toLowerCase().indexOf(searchWord) !== -1;
+     })
+       
+    }
+  });
+ return filteredCountires;
+  
 }
 const deboune = (fun, delay) => {
   let timeoutid;
@@ -212,7 +260,7 @@ async function searchResult(url) {
     let timeout = setTimeout(() => {
       fetchController.abort();
     }, 2000);
-    const response = await fetch(url,{signal: fetchController.signal});
+    const response = await fetch(url, { signal: fetchController.signal });
     if (response.status === 200) {
       const result = await response.json();
       return result;
@@ -220,11 +268,10 @@ async function searchResult(url) {
       throw "something went error";
     }
   } catch (error) {
-    console.log(TypeError(error))
-    if(error.name === "AbortError" )return
+    console.log(TypeError(error));
+    if (error.name === "AbortError") return;
     countriesContainer.innerHTML = "";
     displayError(error);
-
   }
 }
 function setFavouriteCountry(country) {
@@ -238,16 +285,17 @@ function getFavourites() {
 }
 async function handleFavouriteCountryEvent(name, e) {
   e.preventDefault();
-  const country = await fetchAPI(
-    `https://restcountries.com/v3.1/alpha?codes=${name}`
-  );
-  if (isFavourite(name)) {
+  let country=countries.find(item=>item.cca3===name)
+  let favourite=isFavourite(name)
+  if (favourite) {
     removeFavouriteCountry(name);
-    document.querySelector(`[icon-name=${name}]`).classList.remove("fav");
   } else {
-    document.querySelector(`[icon-name=${name}]`).classList.add("fav");
-    setFavouriteCountry(country[0]);
+    setFavouriteCountry(country);
   }
+    indicateFavIconColor(name,favourite)
+    let favouritesHtml=prepareFavouritesHtml(favourites);
+    displayCountries(favouritesHtml,favouritesContainer);
+ 
 }
 function isFavourite(country) {
   let fav = false;
@@ -265,46 +313,44 @@ function removeFavouriteCountry(country) {
   });
   localStorage.setItem("favourites", JSON.stringify(favourites));
 }
-function displayFavouriteCountries(favourites) {
-  if (favourites) {
-    favourites.forEach((favourite) => {
-      let favouriteObject = {
-        cca3: favourite.cca3,
-        flag: favourite.flags.svg,
-        name: favourite.name.common,
-      };
-      showFavouriteCountry(favouriteObject);
-    });
-    
+function prepareFavouritesHtml(favourites){
+  let html="";
+  if(favourites){
+    favourites.forEach((favourite)=>{
+      html+=`
+      <div class="favourite-country mb-3" id="${favourite.cca3}">
+      <div class="country-info">
+      <div class="img">
+        <img src="${favourite.flags.svg}" alt="" >
+      </div>
+       <p>${favourite.name.common}</p>
+   </div>
+    <button name="${favourite.cca3}">&#x2716;</button>
+      </div>
+      
+      `
+    })
+    return html
   }
 }
-function showFavouriteCountry(favouriteCountry) {
-  const { cca3, flag, name } = favouriteCountry;
-  const favouriteCountryDiv = document.createElement("div");
-  favouriteCountryDiv.setAttribute("id", `${cca3}`);
-  favouriteCountryDiv.classList.add("favourite-country", "mb-3");
-  favouriteCountryDiv.innerHTML = `
-  <div class="country-info">
-     <div class="img">
-       <img src="${flag}" alt="" >
-     </div>
-      <p>${name}</p>
-  </div>
-   <button name="${cca3}">&#x2716;</button>
-  `;
-  favouritesContainer.appendChild(favouriteCountryDiv);
-}
-function addDragDropEvent(countries){
+function addDragDropEvent(countries) {
   countries.forEach((country) => {
     country.addEventListener("dragstart", dragStart);
     country.addEventListener("dragend", dragEnd);
   });
 }
-function dropedContainerEvent(){
+function dropedContainerEvent() {
   dropedContainer.addEventListener("dragover", dragOver);
   dropedContainer.addEventListener("dragenter", dragEnter);
   dropedContainer.addEventListener("dragleave", dragLeave);
   dropedContainer.addEventListener("drop", dragDrop);
+}
+function indicateFavIconColor(id,favourite){
+  if(favourite){
+    document.querySelector(`[icon-name=${id}]`).classList.remove("fav");
+  }else{
+    document.querySelector(`[icon-name=${id}]`).classList.add("fav");
+  }
 }
 
 

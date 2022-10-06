@@ -22,7 +22,7 @@ body {
   font-size: 14px;
   width: 100%;
   height: 100vh;
-  transition: all 0.4s ease;
+  transition: color .4s ease-in-out, background-color .4s ease-in-out;
  
 }
 .spinner-container{
@@ -125,14 +125,16 @@ nav .mode button i {
 }
 
 .fav-section{
-  margin-top: 50px; 
+ 
+  /* margin-top: 40px;  */
   padding-right: 20px;
-  padding-top: 0;
+  /* padding-top: 20px; */
   padding-bottom: 20px;
-  padding-left: 10px;
+  
+  
 }
 .section-container{
-  height: 740px; 
+  height: calc(100vh - 240px);
   box-shadow: var(--box-shadow);
   padding-left: 20px;
   padding-top: 20px;
@@ -141,9 +143,9 @@ nav .mode button i {
   padding-bottom: 50px;
 }
 .favourites-list{
- height: 100%;
- overflow: hidden;
- overflow-y: auto;
+  height: 100%;
+  overflow: hidden;
+  overflow-y: auto;
 
 }
 .section-container h2{
@@ -195,8 +197,8 @@ nav .mode button i {
    margin-right: 10px;
 }
 .countries {
-  height: 740px; 
-  margin-top: 50px;
+
+  height:  calc(100vh - 240px);  
   overflow: hidden;
   overflow-y: auto; 
 
@@ -204,6 +206,7 @@ nav .mode button i {
 .countries::-webkit-scrollbar{
   width: 15px;
   padding: 10px;
+  
 }
 .countries::-webkit-scrollbar-thumb{
   background-color: var(--dark-gray);
@@ -245,8 +248,8 @@ nav .mode button i {
   
 }
 .countries .row {
-  margin-left: -40px;
-  margin-right: -40px;
+  margin-left: -20px;
+  margin-right: -20px;
 }
 .search-header {
   margin-top: 50px;
@@ -261,7 +264,7 @@ nav .mode button i {
   padding-left: 35px;
   color: var(--icon-color);
 }
-.form-control {
+.search-box input {
   max-width: 470px;
   width: 100%;
   background: var(--div-color);
@@ -336,7 +339,9 @@ nav .mode button i {
   width: 100%;
   height: 100%;
 }
-
+.country-container:hover{
+    /* margin-top: 10px; */
+}
 .card:hover {
   box-shadow: var(--box-shadow-hover);
   transition: 0.3s;
@@ -387,7 +392,7 @@ nav .mode button i {
   }
   .countries {
     height: 100%; 
-    margin-top: 50px;
+    /* margin-top: 50px; */
   }
   .card .icon{
     display: flex;
